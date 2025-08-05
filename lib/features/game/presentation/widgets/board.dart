@@ -2,8 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../../../../../models/ball.dart';
-import '../../common/controllers/game_controller.dart';
+import 'package:spitball/core/controllers/game_controller.dart';
+import '../../domain/entities/ball.dart';
 
 class BoardWidget extends StatefulWidget {
   final GameController gameController;

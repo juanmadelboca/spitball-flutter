@@ -1,11 +1,10 @@
 import 'dart:async';
-import 'dart:convert'; // For jsonEncode/jsonDecode
 
-import '../../../models/tile.dart';
-import '../../../models/ball.dart';
-import '../../../models/ball_type.dart';
+import '../../features/game/domain/entities/ball.dart';
+import '../../features/game/domain/entities/ball_type.dart';
+import '../../features/game/domain/entities/tile.dart';
 import '../ai/artificial_intelligence_algorithm.dart';
-import '../../../common/exceptions/game_exceptions.dart';
+import '../exceptions/game_exceptions.dart';
 import '../services/networking_service.dart'; // Will be created later
 
 // Manages all game logic, state, and interactions.

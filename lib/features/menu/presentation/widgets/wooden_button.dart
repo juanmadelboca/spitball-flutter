@@ -1,7 +1,7 @@
 // lib/widgets/wooden_button.dart
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../common/wood_texture.dart';
+import '../../../../core/wood_texture.dart';
 
 class WoodenButton extends StatelessWidget {
   final String text;

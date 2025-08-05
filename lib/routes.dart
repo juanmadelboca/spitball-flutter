@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:spitball/screens/menu/index.dart';
+import 'package:spitball/features/menu/presentation/pages/menu.dart';
 
 var duration = const Duration(milliseconds: 300);
 

@@ -2,10 +2,10 @@ import 'dart:async'; // Added for Timer
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart'; // For potential providers
-import 'package:spitball/screens/menu/index.dart';
+import 'package:spitball/core/controllers/game_controller.dart';
+import 'package:spitball/features/menu/presentation/pages/menu.dart';
 
-import '../../common/controllers/game_controller.dart';
-import 'board.dart';
+import '../widgets/board.dart';
 // TODO: Import finish_game_screen.dart
 
 // Provider for GameController - this assumes GameController is passed to GameScreen

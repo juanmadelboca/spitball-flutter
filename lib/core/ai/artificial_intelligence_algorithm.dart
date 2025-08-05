@@ -1,7 +1,7 @@
 import 'dart:math';
-import '../../../models/tile.dart';
-import '../../../models/ball.dart';
-import '../../../models/ball_type.dart';
+import '../../features/game/domain/entities/ball.dart';
+import '../../features/game/domain/entities/ball_type.dart';
+import '../../features/game/domain/entities/tile.dart';
 
 // Manages AI movements and strategies.
 class ArtificialIntelligenceAlgorithm {

@@ -1,8 +1,9 @@
-import 'ball.dart';
-import 'ball_type.dart';
 
 // Represents a single tile on the game board.
 // It can hold a ball and manages battle logic when a new ball enters.
+import 'ball.dart';
+import 'ball_type.dart';
+
 class Tile {
 
   // A tile is initially empty (represented by a Ball of size 0).

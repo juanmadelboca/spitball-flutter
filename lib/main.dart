@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spitball/routes.dart';
-import 'package:spitball/screens/menu/index.dart';
+import 'package:spitball/features/menu/presentation/pages/menu.dart';
 
 void main() {
   runApp(
