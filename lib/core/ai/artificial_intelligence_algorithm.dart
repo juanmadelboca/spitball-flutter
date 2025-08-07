@@ -1,6 +1,5 @@
 import 'dart:math';
 import '../../features/game/domain/entities/ball.dart';
-import '../../features/game/domain/entities/ball_type.dart';
 import '../../features/game/domain/entities/tile.dart';
 
 // Manages AI movements and strategies.

@@ -6,15 +6,6 @@ import 'package:spitball/core/controllers/game_controller.dart';
 import 'package:spitball/features/menu/presentation/pages/menu.dart';
 
 import '../widgets/board.dart';
-// TODO: Import finish_game_screen.dart
-
-// Provider for GameController - this assumes GameController is passed to GameScreen
-// or created here. For now, let's assume it's passed via constructor.
-// If created here, it would need parameters like difficulty, onlineGameId etc.
-// final gameControllerProvider = Provider<GameController>((ref) {
-//   throw UnimplementedError('GameController must be provided to GameScreen');
-// });
-
 class GameScreen extends ConsumerStatefulWidget {
   final GameController gameController;
 

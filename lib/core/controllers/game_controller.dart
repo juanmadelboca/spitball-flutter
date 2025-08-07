@@ -5,10 +5,8 @@ import '../../features/game/domain/entities/ball_type.dart';
 import '../../features/game/domain/entities/tile.dart';
 import '../ai/artificial_intelligence_algorithm.dart';
 import '../exceptions/game_exceptions.dart';
-import '../services/networking_service.dart'; // Will be created later
+import '../services/networking_service.dart';
 
-// Manages all game logic, state, and interactions.
-// Equivalent to GameManager.java
 class GameController {
   late List<List<Tile>> tiles;
   static const int boardWidth = 9;
