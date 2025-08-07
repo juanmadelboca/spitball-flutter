@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:spitball/core/controllers/game_controller.dart';
-import 'package:spitball/core/services/networking_service.dart';
 import 'package:spitball/features/menu/presentation/widgets/wooden_button.dart';
 
 // Assuming your other files and providers are correctly set up
@@ -12,11 +11,6 @@ import '../../../game/presentation/pages/index.dart';
 import 'high_scores.dart';
 import '../../../settings/presentation/pages/index.dart';
 import '../../../tutorial/presentation/pages/index.dart';
-
-// Your existing provider
-final networkingServiceProvider = Provider<NetworkingService>((ref) {
-  return NetworkingService();
-});
 
 class MainMenuScreen extends ConsumerStatefulWidget {
   static const routeName = "/MainMenuScreen";
@@ -31,12 +25,9 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen> {
 
   void _startGame(BuildContext context, int difficulty) {
     print('Starting game with AI difficulty: $difficulty');
-    final networkingService = ref.read(networkingServiceProvider);
     GameController aiGameController = GameController(
       isAgainstAI: true,
       difficulty: difficulty,
-      networkingService: networkingService,
-      gameId: 0, // Local game
     );
 
     Navigator.pushReplacement(

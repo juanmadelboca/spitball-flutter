@@ -2,17 +2,21 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:spitball/core/controllers/game_controller.dart';
+import 'package:spitball/features/game/domain/entities/tile.dart';
 import '../../domain/entities/ball.dart';
 
 class BoardWidget extends StatefulWidget {
-  final GameController gameController;
+  final List<List<Tile>> tiles;
   final Function(int row, int col) onTileTap;
+  final int selectedRow;
+  final int selectedCol;
 
   const BoardWidget({
     super.key,
-    required this.gameController,
+    required this.tiles,
     required this.onTileTap,
+    this.selectedRow = -1,
+    this.selectedCol = -1,
   });
 
   @override
@@ -56,12 +60,12 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
           final availableWidth = constraints.maxWidth * 0.90;
           final availableHeight = constraints.maxHeight * 0.90;
 
-          final tileWidth = availableWidth / GameController.boardWidth;
-          final tileHeight = availableHeight / GameController.boardHeight;
+          final tileWidth = availableWidth / 9;
+          final tileHeight = availableHeight / 5;
           final tileSize = min(tileWidth, tileHeight).floorToDouble();
 
-          final boardPixelWidth = tileSize * GameController.boardWidth;
-          final boardPixelHeight = tileSize * GameController.boardHeight;
+          final boardPixelWidth = tileSize * 9;
+          final boardPixelHeight = tileSize * 5;
 
           return Padding(
             padding: EdgeInsets.symmetric(
@@ -82,16 +86,14 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
                   spacing: 0,
                   runSpacing: 0,
                   children: List.generate(
-                    GameController.boardWidth * GameController.boardHeight,
+                    9 * 5,
                     (index) {
-                      final row = index ~/ GameController.boardWidth;
-                      final col = index % GameController.boardWidth;
-                      final tile = widget.gameController.tiles[row][col];
+                      final row = index ~/ 9;
+                      final col = index % 9;
+                      final tile = widget.tiles[row][col];
                       final ball = tile.ball;
 
-                      final isSelected = widget.gameController.clicks == 1 &&
-                          widget.gameController.initialRow == row &&
-                          widget.gameController.initialCol == col;
+                      final isSelected = widget.selectedRow == row && widget.selectedCol == col;
 
                       return SizedBox(
                         width: tileSize,
