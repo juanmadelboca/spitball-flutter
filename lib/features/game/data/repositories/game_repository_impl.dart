@@ -1,7 +1,7 @@
 // lib/features/game/data/repositories/game_repository_impl.dart
 import 'dart:async';
 import 'package:dartz/dartz.dart';
-import 'package:spitball/features/game/data/datasources/ai_datasource.dart';
+import 'package:spitball/features/game/domain/datasources/ai_datasource.dart';
 
 // Core
 import '../../../../core/error/failure.dart';

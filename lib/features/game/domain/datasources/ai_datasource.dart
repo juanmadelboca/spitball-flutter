@@ -1,6 +1,6 @@
 
 // The abstract contract for any AI implementation
-import '../../domain/entities/tile.dart' show Tile;
+import '../entities/tile.dart' show Tile;
 
 abstract class AiDataSource {
   List<int> calculateEasyMove(List<List<Tile>> tiles);

@@ -1,5 +1,5 @@
 import 'dart:math';
-import 'package:spitball/features/game/data/datasources/ai_datasource.dart';
+import 'package:spitball/features/game/domain/datasources/ai_datasource.dart';
 
 import '../../domain/entities/ball.dart';
 import '../../domain/entities/tile.dart';

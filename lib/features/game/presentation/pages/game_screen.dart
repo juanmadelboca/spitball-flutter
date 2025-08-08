@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spitball/features/game/data/datasources/ai_datasource_impl.dart';
-import 'package:spitball/features/game/domain/repositories/game_repository_impl.dart';
+import 'package:spitball/features/game/data/repositories/game_repository_impl.dart';
 import 'package:spitball/features/game/domain/usecases/game_update.dart';
 import 'package:spitball/features/game/domain/usecases/handle_taps.dart';
 import 'package:spitball/features/game/domain/usecases/intialize_game.dart';
