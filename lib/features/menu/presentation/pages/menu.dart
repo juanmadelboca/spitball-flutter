@@ -8,7 +8,7 @@ import 'package:spitball/core/services/networking_service.dart';
 import 'package:spitball/features/menu/presentation/widgets/wooden_button.dart';
 
 // Assuming your other files and providers are correctly set up
-import '../../../game/presentation/pages/index.dart';
+import '../../../game/presentation/pages/game_screen.dart';
 import 'high_scores.dart';
 import '../../../settings/presentation/pages/index.dart';
 import '../../../tutorial/presentation/pages/index.dart';
@@ -41,7 +41,7 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen> {
 
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => GameScreen(gameController: aiGameController)),
+      MaterialPageRoute(builder: (context) => GameScreen()),
     );
   }
 

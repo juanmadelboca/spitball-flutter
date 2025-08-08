@@ -17,6 +17,9 @@ dependencies:
   flutter_riverpod: ^2.5.1
   google_fonts: ^6.2.1 # Or latest version
   flutter_svg: ^2.0.10+1 # Add this line
+  flutter_bloc: ^9.1.1
+  equatable: ^2.0.7
+  get_it: ^8.2.0
 
 dev_dependencies:
   flutter_test:
