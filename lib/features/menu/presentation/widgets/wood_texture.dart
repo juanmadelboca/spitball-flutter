@@ -6,7 +6,6 @@ class WoodTexture extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // This SVG code generates a cleaner, beveled wood texture.
     const String svgString = '''
     <svg width="280" height="60" viewBox="0 0 280 60" fill="none" xmlns="http://www.w3.org/2000/svg">
         <!-- Base color of the button -->
@@ -27,7 +26,7 @@ class WoodTexture extends StatelessWidget {
 
     return SvgPicture.string(
       svgString,
-      fit: BoxFit.fill, // Stretches the SVG to fill its container
+      fit: BoxFit.fill,
     );
   }
 }

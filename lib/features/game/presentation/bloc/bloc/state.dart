@@ -10,8 +10,8 @@ abstract class GameState extends Equatable {
 class GameInitial extends GameState {}
 
 class GameInProgress extends GameState {
-  final List<List<Tile>> board;
-  final int currentPlayer; // 0 for Green, 1 for Pink
+  final List<List<TileEntity>> board;
+  final int currentPlayer;
   final bool isMyTurn;
   final int? selectedRow;
   final int? selectedCol;

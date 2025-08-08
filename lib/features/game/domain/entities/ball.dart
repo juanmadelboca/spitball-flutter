@@ -1,18 +1,13 @@
-// Represents a ball in the game.
-
-// Abstract base class for a ball.
-abstract class Ball {
+abstract class BallEntity {
   int size;
 
-  Ball(this.size);
+  BallEntity(this.size);
 }
 
-// Represents a green ball.
-class BallGreen extends Ball {
-  BallGreen(int size) : super(size);
+class BallGreenEntity extends BallEntity {
+  BallGreenEntity(super.size);
 }
 
-// Represents a pink ball.
-class BallPink extends Ball {
-  BallPink(int size) : super(size);
+class BallPinkEntity extends BallEntity {
+  BallPinkEntity(super.size);
 }

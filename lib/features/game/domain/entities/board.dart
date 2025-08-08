@@ -1,9 +1,8 @@
-// lib/features/game/domain/entities/board_entity.dart
 import 'package:equatable/equatable.dart';
 import 'tile.dart';
 
 class BoardEntity extends Equatable {
-  final List<List<Tile>> tiles;
+  final List<List<TileEntity>> tiles;
   final int currentPlayer;
   final int? selectedRow;
   final int? selectedCol;

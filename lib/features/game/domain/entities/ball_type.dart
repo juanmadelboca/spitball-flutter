@@ -1,14 +1,15 @@
-// Defines the type of ball in the game.
-enum BallType {
+
+//TODO: UNIFY TO BALL
+enum BallTypeEntity {
   ballGreen,
   ballPink;
 
   @override
   String toString() {
     switch (this) {
-      case BallType.ballGreen:
+      case BallTypeEntity.ballGreen:
         return 'BallGreen';
-      case BallType.ballPink:
+      case BallTypeEntity.ballPink:
         return 'BallPink';
     }
   }

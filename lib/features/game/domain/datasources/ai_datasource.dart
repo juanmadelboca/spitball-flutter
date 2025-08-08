@@ -1,8 +1,7 @@
-
-// The abstract contract for any AI implementation
-import '../entities/tile.dart' show Tile;
+import 'package:spitball/features/game/domain/entities/tile.dart';
 
 abstract class AiDataSource {
-  List<int> calculateEasyMove(List<List<Tile>> tiles);
-  List<int> calculateHardMove(List<List<Tile>> tiles, {required bool chaser});
+  List<int> calculateEasyMove(List<List<TileEntity>> tiles);
+
+  List<int> calculateHardMove(List<List<TileEntity>> tiles, {required bool chaser});
 }

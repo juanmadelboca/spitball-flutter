@@ -1,26 +1,20 @@
-// main_menu_screen.dart
-
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:spitball/features/menu/presentation/widgets/wooden_button.dart';
 
-// Assuming your other files and providers are correctly set up
 import '../../../game/presentation/pages/game_screen.dart';
-import 'high_scores.dart';
-import '../../../settings/presentation/pages/index.dart';
 import '../../../tutorial/presentation/pages/index.dart';
 
-class MainMenuScreen extends ConsumerStatefulWidget {
+class MainMenuScreen extends StatefulWidget {
   static const routeName = "/MainMenuScreen";
 
   const MainMenuScreen({super.key});
 
   @override
-  ConsumerState<MainMenuScreen> createState() => _MainMenuScreenState();
+  State<MainMenuScreen> createState() => _MainMenuScreenState();
 }
 
-class _MainMenuScreenState extends ConsumerState<MainMenuScreen> {
+class _MainMenuScreenState extends State<MainMenuScreen> {
   bool _isPlayMenuExpanded = false;
 
   void _startGame(BuildContext context, int difficulty) {
@@ -41,24 +35,20 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen> {
       decoration: const BoxDecoration(
         image: DecorationImage(
           image: AssetImage('assets/images/background.png'),
-          fit: BoxFit.cover, // or BoxFit.fill or BoxFit.fitWidth depending on your image
+          fit: BoxFit.cover,
         ),
       ),
       child: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            // Added for smaller screens
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                // 1. Slime Character Image
                 Image.asset(
-                  'assets/images/ballgreen.png', // Make sure this path is correct
+                  'assets/images/ballgreen.png',
                   height: 150,
                 ),
                 const SizedBox(height: 10),
-
-                // 2. Main Menu Title
                 Text(
                   'MAIN MENU',
                   style: GoogleFonts.luckiestGuy(
@@ -74,8 +64,6 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen> {
                   ),
                 ),
                 const SizedBox(height: 30),
-
-                // 3. Play Button
                 WoodenButton(
                   text: 'Play',
                   hasIcon: true,
@@ -85,42 +73,26 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen> {
                     });
                   },
                 ),
-
-                // 4. Difficulty Buttons (Conditional)
                 if (_isPlayMenuExpanded)
                   Column(
                     children: [
                       WoodenButton(
                         text: 'Easy',
                         fontSize: 22,
-                        onPressed: () => _startGame(context, 0), // AI Difficulty 0
+                        onPressed: () => _startGame(context, 0),
                       ),
                       WoodenButton(
                         text: 'Medium',
                         fontSize: 22,
-                        onPressed: () => _startGame(context, 1), // AI Difficulty 1
+                        onPressed: () => _startGame(context, 1),
                       ),
                       WoodenButton(
                         text: 'Hard',
                         fontSize: 22,
-                        onPressed: () => _startGame(context, 2), // AI Difficulty 2
+                        onPressed: () => _startGame(context, 2),
                       ),
                     ],
                   ),
-
-                // 5. Other Menu Buttons
-                WoodenButton(
-                  text: 'Settings',
-                  onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const SettingsScreen()));
-                  },
-                ),
-                WoodenButton(
-                  text: 'High Scores',
-                  onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const HighScoresScreen()));
-                  },
-                ),
                 WoodenButton(
                   text: 'Tutorial',
                   onPressed: () {

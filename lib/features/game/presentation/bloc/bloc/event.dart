@@ -26,7 +26,6 @@ class TileTapped extends GameEvent {
   List<Object> get props => [row, col];
 }
 
-// THE CHANGE: This now carries the pure domain entity.
 class _GameUpdated extends GameEvent {
   final BoardEntity boardEntity;
 

@@ -1,19 +1,15 @@
 import 'package:flutter/material.dart';
 
 import '../../domain/entities/ball.dart';
-import '../../domain/entities/tile.dart'; // Import your Tile and Ball entities
+import '../../domain/entities/tile.dart';
 
 class BoardWidget extends StatelessWidget {
-  /// The 2D list representing the current state of the board.
-  final List<List<Tile>> board;
+  final List<List<TileEntity>> board;
 
-  /// Callback function to execute when a tile is tapped.
   final Function(int row, int col) onTileTap;
 
-  /// The row of the currently selected tile, for UI highlighting.
   final int? selectedRow;
 
-  /// The column of the currently selected tile, for UI highlighting.
   final int? selectedCol;
 
   const BoardWidget({
@@ -26,20 +22,18 @@ class BoardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Use AspectRatio to maintain the board's shape regardless of screen size.
     return AspectRatio(
-      aspectRatio: 9 / 5, // Based on your board's dimensions (width / height)
+      aspectRatio: 9 / 5,
       child: GridView.builder(
-        physics: const NeverScrollableScrollPhysics(), // Disable scrolling
+        physics: const NeverScrollableScrollPhysics(),
         itemCount: board.length * board[0].length,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: board[0].length, // 9 columns
+          crossAxisCount: board[0].length,
         ),
         itemBuilder: (context, index) {
-          // Calculate the row and column from the grid index
           final int row = index ~/ board[0].length;
           final int col = index % board[0].length;
-          final Tile tile = board[row][col];
+          final TileEntity tile = board[row][col];
           final bool isSelected = (row == selectedRow && col == selectedCol);
 
           return GestureDetector(
@@ -54,7 +48,6 @@ class BoardWidget extends StatelessWidget {
                 ),
                 borderRadius: BorderRadius.circular(4.0),
               ),
-              // Center the ball widget within the tile
               child: _buildBall(tile),
             ),
           );
@@ -63,19 +56,16 @@ class BoardWidget extends StatelessWidget {
     );
   }
 
-  /// Helper widget to build the ball if one exists on the tile.
-  Widget? _buildBall(Tile tile) {
+  Widget? _buildBall(TileEntity tile) {
     if (tile.ball == null) {
       return null;
     }
 
-    // Determine the color based on the ball type
-    final Color ballColor =
-    (tile.ball is BallGreen) ? Colors.green.shade400 : Colors.pink.shade400;
+    final Color ballColor = (tile.ball is BallGreenEntity) ? Colors.green.shade400 : Colors.pink.shade400;
 
     return Center(
       child: Container(
-        width: 30, // Example size, you can make this dynamic
+        width: 30,
         height: 30,
         decoration: BoxDecoration(
           color: ballColor,
