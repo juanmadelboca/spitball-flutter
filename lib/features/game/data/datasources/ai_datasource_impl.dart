@@ -7,6 +7,23 @@ class AiDataSourceImpl implements AiDataSource {
   static const int height = 5;
   static const int width = 9;
 
+  /// Calculates an "easy" difficulty move for the AI.
+  ///
+  /// This function implements a simple aggressive strategy. It iterates through all
+  /// available AI balls and searches for any adjacent opponent ball that is weaker
+  /// or of equal size. It will select the last valid attack it finds.
+  ///
+  /// If no direct attack is possible, it will fall back to making a completely
+  /// random move by calling [_randomMove].
+  ///
+  /// ## Parameters:
+  /// - `tiles`: The current 2D list of [TileEntity] objects representing the game board.
+  ///
+  /// ## Returns:
+  /// A `List<int>` containing 5 elements that describe the move:
+  /// `[yInitial, xInitial, yFinal, xFinal, moveType]`
+  ///
+  /// The `moveType` for a move is always `0`.
   @override
   List<int> calculateEasyMove(List<List<TileEntity>> tiles) {
     List<List<int>> possibleVectors = _getAIBalls(tiles);
@@ -42,6 +59,28 @@ class AiDataSourceImpl implements AiDataSource {
     }
   }
 
+  /// Calculates a "hard" difficulty move for the AI.
+  ///
+  /// This function implements a strategic search for the best possible move. It
+  /// prioritizes direct attacks on weaker opponent balls. If no direct attack is
+  /// found, it will attempt a "split" attack.
+  ///
+  /// If no aggressive moves are possible, its behavior depends on the [chaser]
+  /// flag. If `true`, it will move its biggest ball towards the nearest weaker
+  /// opponent ball. Otherwise, it will fall back to making a random move.
+  ///
+  /// ## Parameters:
+  /// - `tiles`: The current 2D list of [Tile] objects representing the game board.
+  /// - `chaser`: If `true`, the AI will perform a "chaser" move as a fallback.
+  ///
+  /// ## Returns:
+  /// A `List<int>` containing 5 elements that describe the move:
+  /// `[yInitial, xInitial, yFinal, xFinal, moveType]`
+  ///
+  /// The `moveType` can be:
+  /// - `0`: A standard move.
+  /// - `-1`: A split move.
+  /// - `1`: A chaser move
   @override
   List<int> calculateHardMove(List<List<TileEntity>> tiles, {required bool chaser}) {
     List<List<int>> aiBallPositions = _getAIBalls(tiles);
@@ -96,6 +135,7 @@ class AiDataSourceImpl implements AiDataSource {
     }
   }
 
+  /// Calculates a completely random move for a single AI ball.
   static List<int> _randomMove(List<List<TileEntity>> tiles) {
     List<int> coordinates;
     List<int> aiBallPos = _getAIRandomBall(tiles);
@@ -118,6 +158,7 @@ class AiDataSourceImpl implements AiDataSource {
     return coordinates;
   }
 
+  /// Pick a random AI Ball
   static List<int> _getAIRandomBall(List<List<TileEntity>> tiles) {
     List<List<int>> aiBalls = _getAIBalls(tiles);
     if (aiBalls.isEmpty) {
@@ -128,6 +169,7 @@ class AiDataSourceImpl implements AiDataSource {
     return aiBalls[index];
   }
 
+  /// Pick the biggest AI Ball
   static List<int> _getBiggestAIBall(List<List<TileEntity>> tiles) {
     List<List<int>> aiBalls = _getAIBalls(tiles);
     if (aiBalls.isEmpty) {
@@ -147,6 +189,7 @@ class AiDataSourceImpl implements AiDataSource {
     return biggestBallPos;
   }
 
+  /// Return a List of all AI Balls positions
   static List<List<int>> _getAIBalls(List<List<TileEntity>> tiles) {
     List<List<int>> positions = [];
     for (int i = 0; i < height; i++) {
@@ -159,6 +202,7 @@ class AiDataSourceImpl implements AiDataSource {
     return positions;
   }
 
+  /// Return a List of all player Balls positions
   static List<List<int>> _getPlayerBalls(List<List<TileEntity>> tiles) {
     List<List<int>> positions = [];
     for (int i = 0; i < height; i++) {
@@ -171,6 +215,11 @@ class AiDataSourceImpl implements AiDataSource {
     return positions;
   }
 
+  /// Calculates a "chaser" move, where the AI's biggest ball moves toward the
+  /// nearest weaker player ball.
+  ///
+  /// If no suitable target is found , this function will fall back to
+  /// making a random move via [_randomMove].
   static List<int> _chaserMove(List<List<TileEntity>> tiles) {
     List<int> aiBiggestBallPos = _getBiggestAIBall(tiles);
     if (aiBiggestBallPos[0] == -1) return _randomMove(tiles);
