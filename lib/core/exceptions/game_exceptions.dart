@@ -1,22 +1,24 @@
-// Custom exceptions for the game logic.
-
-class InvalidMoveException implements Exception {
+/// Base class for all custom exceptions related to game logic.
+/// Implementing Exception makes it a proper Dart exception class.
+class GameException implements Exception {
   final String message;
-  InvalidMoveException(this.message);
+
+  const GameException(this.message);
+
   @override
-  String toString() => 'InvalidMoveException: \$message';
+  String toString() => 'GameException: $message';
 }
 
-class LimitMoveException implements Exception {
-  final String message;
-  LimitMoveException(this.message);
-  @override
-  String toString() => 'LimitMoveException: \$message';
+// Specific exceptions that describe exactly what went wrong.
+
+class InvalidMoveException extends GameException {
+  const InvalidMoveException(String message) : super(message);
 }
 
-class UnderSizedSpitException implements Exception {
-  final String message;
-  UnderSizedSpitException(this.message);
-  @override
-  String toString() => 'UnderSizedSpitException: \$message';
+class UnderSizedSpitException extends GameException {
+  const UnderSizedSpitException(String message) : super(message);
+}
+
+class LimitMoveException extends GameException {
+  const LimitMoveException(String message) : super(message);
 }

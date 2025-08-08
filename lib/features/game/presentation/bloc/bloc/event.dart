@@ -7,13 +7,15 @@ abstract class GameEvent extends Equatable {
   List<Object> get props => [];
 }
 
-// Event to start a new game
 class GameStarted extends GameEvent {
-  // Pass game settings like difficulty, online mode, etc.
-  // For simplicity, we'll omit them here but you'd add them.
+  final int aiLevel;
+
+  const GameStarted({required this.aiLevel});
+
+  @override
+  List<Object> get props => [aiLevel];
 }
 
-// Event when a user taps a tile on the board
 class TileTapped extends GameEvent {
   final int row;
   final int col;
@@ -24,12 +26,12 @@ class TileTapped extends GameEvent {
   List<Object> get props => [row, col];
 }
 
-// Internal event for when the game state is updated from an external source (like AI or network)
+// THE CHANGE: This now carries the pure domain entity.
 class _GameUpdated extends GameEvent {
-  final GameState newState;
+  final BoardEntity boardEntity;
 
-  const _GameUpdated(this.newState);
+  const _GameUpdated(this.boardEntity);
 
   @override
-  List<Object> get props => [newState];
+  List<Object> get props => [boardEntity];
 }

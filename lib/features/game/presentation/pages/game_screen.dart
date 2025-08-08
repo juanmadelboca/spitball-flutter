@@ -1,7 +1,8 @@
 // presentation/pages/game_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:spitball/features/game/data/repositories/game_repository_impl.dart';
+import 'package:spitball/features/game/data/datasources/ai_datasource_impl.dart';
+import 'package:spitball/features/game/domain/repositories/game_repository_impl.dart';
 import 'package:spitball/features/game/domain/usecases/game_update.dart';
 import 'package:spitball/features/game/domain/usecases/handle_taps.dart';
 import 'package:spitball/features/game/domain/usecases/intialize_game.dart';
@@ -13,16 +14,17 @@ import 'package:spitball/features/menu/presentation/pages/menu.dart';
 // ... other imports for GameView
 
 class GameScreen extends StatelessWidget {
-  const GameScreen({super.key});
+  final int aiLevel;
+  const GameScreen({super.key, required this.aiLevel});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) {
-        // 1. Create the repository implementation
-        final gameRepository = GameRepositoryImpl();
 
-        // 2. Create instances of each use case, injecting the repository
+        final aiDataSource = AiDataSourceImpl();
+
+        final gameRepository = GameRepositoryImpl(aiDataSource: aiDataSource);
         final initializeGameUseCase = InitializeGameUseCase(gameRepository);
         final handleTapUseCase = HandleTapUseCase(gameRepository);
         final getGameUpdatesUseCase = GetGameUpdatesUseCase(gameRepository);
@@ -32,7 +34,7 @@ class GameScreen extends StatelessWidget {
           initializeGameUseCase: initializeGameUseCase,
           handleTapUseCase: handleTapUseCase,
           getGameUpdatesUseCase: getGameUpdatesUseCase,
-        )..add(GameStarted());
+        )..add(GameStarted(aiLevel: aiLevel));
       },
       child: GameView(), // The GameView widget itself remains unchanged
     );
