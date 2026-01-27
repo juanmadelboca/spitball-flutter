@@ -1,12 +1,16 @@
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/events.dart';
-import 'package:flame_bloc/flame_bloc.dart';
 import 'package:spitball/features/game/domain/entities/ball.dart';
 import 'package:spitball/features/game/domain/entities/tile.dart';
-import 'package:spitball/features/game/presentation/bloc/bloc/bloc.dart';
 
-class BallComponent extends SpriteComponent with TapCallbacks, HasGameRef {
+enum BallState {
+  idle,
+  selected,
+  eating,
+}
+
+class BallComponent extends SpriteAnimationGroupComponent<BallState> with TapCallbacks, HasGameRef {
   final TileEntity tile;
   final int row;
   final int col;
@@ -32,21 +36,64 @@ class BallComponent extends SpriteComponent with TapCallbacks, HasGameRef {
 
     final bool isGreen = tile.ball is BallGreenEntity;
     String prefix = isGreen ? 'green_ball' : 'pink_ball';
+
+    // Helper to load either a 1-frame (static) or 2-frame (animated) sprite
+    Future<SpriteAnimation> loadBallAnimation(String suffix) async {
+       final String fileName = '${prefix}_$suffix.png';
+       final image = await gameRef.images.load(fileName);
+       
+       // Check if it's a vertical sprite sheet (2 frames)
+       // Assumption: Frame is square-ish. If Height ~= 2 * Width, it's 2 frames.
+       // Actually user said 128x256, so yes.
+       
+       final int amount = (image.height >= image.width * 1.8) ? 2 : 1; 
+       
+       return SpriteAnimation.fromFrameData(
+         image,
+         SpriteAnimationData.sequenced(
+           amount: amount,
+           stepTime: 0.4,
+           textureSize: Vector2(image.width.toDouble(), image.width.toDouble()),
+           amountPerRow: 1, // Force vertical sprite sheet reading
+         ),
+       );
+    }
+
+    final idleAnim = await loadBallAnimation('idle');
+    final selectedAnim = await loadBallAnimation('selected');
     
+    // For eating, we might just re-use selected or have a specific one if it exists?
+    // User mentioned green_ball_eating.png exists in my file list.
+    SpriteAnimation? eatingAnim;
+    try {
+      // Try loading eating animation regardless of whether it exists, if it fails we fallback
+      // Actually standard flame load throws if not found? 
+      // Based on file list: green_ball_eating.png exists. pink_ball_eating.png exists.
+      eatingAnim = await loadBallAnimation('eating');
+    } catch (e) {
+      // If missing, fallback to selected
+      eatingAnim = selectedAnim;
+    }
+
+    animations = {
+      BallState.idle: idleAnim,
+      BallState.selected: selectedAnim,
+      BallState.eating: eatingAnim,
+    };
+
     if (triggersEatAnimation) {
-       // Show eating sprite temporarily
-       sprite = await gameRef.loadSprite('${prefix}_eating.png');
+       current = BallState.eating;
        
        // Add a delayed effect to return to idle/selected
        add(
          TimerComponent(
            period: 1.0, 
            removeOnFinish: true,
-           onTick: () async {
+           onTick: () {
               if (isSelected) {
-                sprite = await gameRef.loadSprite('${prefix}_selected.png');
+                current = BallState.selected;
               } else {
-                sprite = await gameRef.loadSprite('${prefix}_idle.png');
+                current = BallState.idle;
               }
            }
          )
@@ -61,25 +108,11 @@ class BallComponent extends SpriteComponent with TapCallbacks, HasGameRef {
        );
 
     } else if (isSelected) {
-      sprite = await gameRef.loadSprite('${prefix}_selected.png');
+      current = BallState.selected;
     } else {
-      sprite = await gameRef.loadSprite('${prefix}_idle.png');
-      
-      _addIdleEffect();
+      current = BallState.idle;
+      // Removed manual ScaleEffect for idle as the sprite animation now handles the "bounce/idle" look.
     }
-  }
-
-  void _addIdleEffect() {
-      add(
-        ScaleEffect.by(
-          Vector2.all(1.1),
-          EffectController(
-            duration: 0.5,
-            reverseDuration: 0.5,
-            infinite: true,
-          ),
-        ),
-      );
   }
 
   @override
