@@ -30,7 +30,9 @@ class SpitballGame extends FlameGame {
 }
 
 class BoardComponent extends Component with FlameBlocListenable<GameBloc, GameState>, HasGameRef<SpitballGame> {
-  
+  // Store previous board ball sizes to detect "Growth" (Eating)
+  List<List<int>>? _previousSizes;
+
   @override
   void onMount() {
     super.onMount();
@@ -46,7 +48,6 @@ class BoardComponent extends Component with FlameBlocListenable<GameBloc, GameSt
   void _updateBoard(GameState state) {
      if (state is GameInProgress) {
         // Clear everything and rebuild
-        // Ideally we optimize this, but for now this ensures correctness
         removeAll(children);
 
         final board = state.board;
@@ -75,13 +76,30 @@ class BoardComponent extends Component with FlameBlocListenable<GameBloc, GameSt
         
         final double startX = (screenSizeWidth - gridWidth) / 2;
         final double startY = (screenSizeHeight - gridHeight) / 2;
+        
+        // Prepare current sizes for next turn
+        List<List<int>> currentSizes = List.generate(rows, (_) => List.filled(cols, 0));
 
          for (int r = 0; r < rows; r++) {
            for (int c = 0; c < cols; c++) {
               final tile = board[r][c];
               final Vector2 tilePos = Vector2(startX + c * cellSize, startY + r * cellSize);
               
-              // Always add a TileComponent for the background and empty tile taps
+              // Helper to check if ball existed previously and was smaller
+              bool didJustEat = false;
+              int currentSize = tile.ball?.size ?? 0;
+              currentSizes[r][c] = currentSize;
+
+              if (tile.ball != null && _previousSizes != null) {
+                  int prevSize = _previousSizes![r][c];
+                  // If there was a ball here, and now it's bigger, it ate someone.
+                  // Only valid if prevSize > 0 (it wasn't empty)
+                  if (prevSize > 0 && currentSize > prevSize) {
+                      didJustEat = true;
+                  }
+              }
+
+              // Always add a TileComponent
               add(TileComponent(
                 row: r, 
                 col: c, 
@@ -98,9 +116,10 @@ class BoardComponent extends Component with FlameBlocListenable<GameBloc, GameSt
                    tile: tile, 
                    row: r, 
                    col: c, 
-                   size: cellSize * 0.8, // Ball slightly smaller than tile
-                   position: tilePos + Vector2.all(cellSize * 0.1), // Center ball in tile
+                   size: cellSize * 0.8, 
+                   position: tilePos + Vector2.all(cellSize * 0.1), 
                    isSelected: (r == state.selectedRow && c == state.selectedCol),
+                   triggersEatAnimation: didJustEat,
                    onBallTapped: (row, col) {
                      bloc.add(TileTapped(row, col));
                    },
@@ -108,6 +127,9 @@ class BoardComponent extends Component with FlameBlocListenable<GameBloc, GameSt
               }
            }
          }
+         
+         // Update cache
+         _previousSizes = currentSizes;
      }
   }
 }

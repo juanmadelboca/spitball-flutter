@@ -13,6 +13,8 @@ class BallComponent extends SpriteComponent with TapCallbacks, HasGameRef {
   final bool isSelected;
   final Function(int, int) onBallTapped;
 
+  final bool triggersEatAnimation;
+
   BallComponent({
     required this.tile,
     required this.row,
@@ -21,6 +23,7 @@ class BallComponent extends SpriteComponent with TapCallbacks, HasGameRef {
     required Vector2 position,
     required this.onBallTapped,
     this.isSelected = false,
+    this.triggersEatAnimation = false,
   }) : super(size: Vector2.all(size), position: position);
 
   @override
@@ -30,13 +33,43 @@ class BallComponent extends SpriteComponent with TapCallbacks, HasGameRef {
     final bool isGreen = tile.ball is BallGreenEntity;
     String prefix = isGreen ? 'green_ball' : 'pink_ball';
     
-    // Simple sprite loading for now
-    if (isSelected) {
+    if (triggersEatAnimation) {
+       // Show eating sprite temporarily
+       sprite = await gameRef.loadSprite('${prefix}_eating.png');
+       
+       // Add a delayed effect to return to idle/selected
+       add(
+         TimerComponent(
+           period: 1.0, 
+           removeOnFinish: true,
+           onTick: () async {
+              if (isSelected) {
+                sprite = await gameRef.loadSprite('${prefix}_selected.png');
+              } else {
+                sprite = await gameRef.loadSprite('${prefix}_idle.png');
+              }
+           }
+         )
+       );
+       
+       // Add a "chomp" scale effect
+       add(
+         SequenceEffect([
+           ScaleEffect.by(Vector2.all(1.2), EffectController(duration: 0.2)),
+           ScaleEffect.by(Vector2.all(1.0), EffectController(duration: 0.2)),
+         ])
+       );
+
+    } else if (isSelected) {
       sprite = await gameRef.loadSprite('${prefix}_selected.png');
     } else {
       sprite = await gameRef.loadSprite('${prefix}_idle.png');
       
-      // Add idle bouncing effect
+      _addIdleEffect();
+    }
+  }
+
+  void _addIdleEffect() {
       add(
         ScaleEffect.by(
           Vector2.all(1.1),
@@ -47,7 +80,6 @@ class BallComponent extends SpriteComponent with TapCallbacks, HasGameRef {
           ),
         ),
       );
-    }
   }
 
   @override
