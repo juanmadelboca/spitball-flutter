@@ -40,68 +40,158 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
       ),
       child: SafeArea(
         child: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Image.asset(
-                  'assets/images/ballgreen.png',
-                  height: 150,
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  'MAIN MENU',
-                  style: GoogleFonts.luckiestGuy(
-                    fontSize: 50,
-                    color: const Color(0xFFf3c64a),
-                    shadows: [
-                      const Shadow(
-                        blurRadius: 3.0,
-                        color: Colors.black,
-                        offset: Offset(3.0, 3.0),
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              // Use Row for landscape, Column for portrait (though we force landscape, this is good practice)
+              bool isWide = constraints.maxWidth > 600;
+
+              if (isWide) {
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    // Left side: Title and Logo
+                    Expanded(
+                      flex: 1,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                           Image.asset(
+                            'assets/images/ballgreen.png',
+                            height: 120, // Slightly smaller for landscape
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            'MAIN MENU',
+                            style: GoogleFonts.luckiestGuy(
+                              fontSize: 50,
+                              color: const Color(0xFFf3c64a),
+                              shadows: [
+                                const Shadow(
+                                  blurRadius: 3.0,
+                                  color: Colors.black,
+                                  offset: Offset(3.0, 3.0),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
+                    ),
+                    // Right side: Buttons
+                    Expanded(
+                      flex: 1,
+                      child: SingleChildScrollView( // Allow scrolling if buttons overflow
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            WoodenButton(
+                              text: 'Play',
+                              hasIcon: true,
+                              onPressed: () {
+                                setState(() {
+                                  _isPlayMenuExpanded = !_isPlayMenuExpanded;
+                                });
+                              },
+                            ),
+                            if (_isPlayMenuExpanded)
+                              Column(
+                                children: [
+                                  WoodenButton(
+                                    text: 'Easy',
+                                    fontSize: 22,
+                                    onPressed: () => _startGame(context, 0),
+                                  ),
+                                  WoodenButton(
+                                    text: 'Medium',
+                                    fontSize: 22,
+                                    onPressed: () => _startGame(context, 1),
+                                  ),
+                                  WoodenButton(
+                                    text: 'Hard',
+                                    fontSize: 22,
+                                    onPressed: () => _startGame(context, 2),
+                                  ),
+                                ],
+                              ),
+                            WoodenButton(
+                              text: 'Tutorial',
+                              onPressed: () {
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => const TutorialScreen()));
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              } else {
+                 // Fallback to original column layout for narrow screens/portrait
+                return SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Image.asset(
+                        'assets/images/ballgreen.png',
+                        height: 150,
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        'MAIN MENU',
+                        style: GoogleFonts.luckiestGuy(
+                          fontSize: 50,
+                          color: const Color(0xFFf3c64a),
+                          shadows: [
+                            const Shadow(
+                              blurRadius: 3.0,
+                              color: Colors.black,
+                              offset: Offset(3.0, 3.0),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 30),
+                      WoodenButton(
+                        text: 'Play',
+                        hasIcon: true,
+                        onPressed: () {
+                          setState(() {
+                            _isPlayMenuExpanded = !_isPlayMenuExpanded;
+                          });
+                        },
+                      ),
+                      if (_isPlayMenuExpanded)
+                        Column(
+                          children: [
+                            WoodenButton(
+                              text: 'Easy',
+                              fontSize: 22,
+                              onPressed: () => _startGame(context, 0),
+                            ),
+                            WoodenButton(
+                              text: 'Medium',
+                              fontSize: 22,
+                              onPressed: () => _startGame(context, 1),
+                            ),
+                            WoodenButton(
+                              text: 'Hard',
+                              fontSize: 22,
+                              onPressed: () => _startGame(context, 2),
+                            ),
+                          ],
+                        ),
+                      WoodenButton(
+                        text: 'Tutorial',
+                        onPressed: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => const TutorialScreen()));
+                        },
+                      ),
+                      const SizedBox(height: 20),
                     ],
                   ),
-                ),
-                const SizedBox(height: 30),
-                WoodenButton(
-                  text: 'Play',
-                  hasIcon: true,
-                  onPressed: () {
-                    setState(() {
-                      _isPlayMenuExpanded = !_isPlayMenuExpanded;
-                    });
-                  },
-                ),
-                if (_isPlayMenuExpanded)
-                  Column(
-                    children: [
-                      WoodenButton(
-                        text: 'Easy',
-                        fontSize: 22,
-                        onPressed: () => _startGame(context, 0),
-                      ),
-                      WoodenButton(
-                        text: 'Medium',
-                        fontSize: 22,
-                        onPressed: () => _startGame(context, 1),
-                      ),
-                      WoodenButton(
-                        text: 'Hard',
-                        fontSize: 22,
-                        onPressed: () => _startGame(context, 2),
-                      ),
-                    ],
-                  ),
-                WoodenButton(
-                  text: 'Tutorial',
-                  onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const TutorialScreen()));
-                  },
-                ),
-                const SizedBox(height: 20),
-              ],
-            ),
+                );
+              }
+            }
           ),
         ),
       ),

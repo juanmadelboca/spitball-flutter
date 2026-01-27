@@ -8,8 +8,9 @@ import 'package:spitball/features/game/domain/usecases/game_update.dart';
 import 'package:spitball/features/game/domain/usecases/handle_taps.dart';
 import 'package:spitball/features/game/domain/usecases/intialize_game.dart';
 
+import 'package:flame/game.dart';
 import 'package:spitball/features/game/presentation/bloc/bloc/bloc.dart';
-import 'package:spitball/features/game/presentation/widgets/board.dart';
+import 'package:spitball/features/game/presentation/flame_game/spitball_game.dart';
 import 'package:spitball/features/menu/presentation/pages/menu.dart';
 
 class GameScreen extends StatelessWidget {
@@ -78,16 +79,21 @@ class GameView extends StatelessWidget {
               }
             },
             child: BlocBuilder<GameBloc, GameState>(
+              buildWhen: (previous, current) {
+                // Only rebuild the widget tree if we switch between high-level states.
+                // If we stay in GameInProgress, let the Flame Game handle the internal updates via FlameBlocListener.
+                return previous.runtimeType != current.runtimeType;
+              },
               builder: (context, state) {
                 if (state is GameInitial) {
                   return const Center(child: CircularProgressIndicator());
                 }
                 if (state is GameInProgress) {
-                  return BoardWidget(
-                    board: state.board,
-                    onTileTap: (row, col) {
-                      context.read<GameBloc>().add(TileTapped(row, col));
-                    },
+                  // This will only be built ONCE when entering the state.
+                  // Subsequent GameInProgress updates won't trigger this build, 
+                  // but will be caught by the SpitballGame's bloc listener.
+                  return GameWidget(
+                    game: SpitballGame(gameBloc: context.read<GameBloc>()),
                   );
                 }
                 if (state is GameOver) {
