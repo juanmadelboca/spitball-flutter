@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 enum DemoType {
   none,
@@ -147,14 +148,13 @@ class _DemoBoardState extends State<DemoBoard> with SingleTickerProviderStateMix
           height: size,
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: Colors.brown[800],
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: Colors.brown[600]!, width: 4),
+            color: const Color(0xFF5D4037), // Darker Brown
+            border: Border.all(color: Colors.black, width: 4), // Hard border
             boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.5),
-                blurRadius: 10,
-                offset: const Offset(0, 5),
+               const BoxShadow(
+                color: Colors.black,
+                blurRadius: 0,
+                offset: Offset(8, 8),
               ),
             ],
           ),
@@ -182,7 +182,7 @@ class _DemoBoardState extends State<DemoBoard> with SingleTickerProviderStateMix
       margin: const EdgeInsets.all(2),
       decoration: BoxDecoration(
         color: (r + c) % 2 == 0 ? const Color(0xFFD7B899) : const Color(0xFFA67B5B), // Checkerboard
-        borderRadius: BorderRadius.circular(4),
+        border: Border.all(color: Colors.black.withValues(alpha: 0.1), width: 1), // Grid lines
       ),
       child: Center(
         child: tile.ballSize > 0
@@ -191,28 +191,16 @@ class _DemoBoardState extends State<DemoBoard> with SingleTickerProviderStateMix
                 width: 30 + (tile.ballSize * 1.5).clamp(0, 20).toDouble(),
                 height: 30 + (tile.ballSize * 1.5).clamp(0, 20).toDouble(),
                 decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  gradient: RadialGradient(
-                    colors: tile.isPlayer
-                        ? [Colors.blueAccent, Colors.blue[900]!]
-                        : [Colors.redAccent, Colors.red[900]!],
-                    center: const Alignment(-0.3, -0.3),
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.4),
-                      blurRadius: 4,
-                      offset: const Offset(2, 2),
-                    ),
-                  ],
+                  color: tile.isPlayer ? Colors.blue : Colors.red,
+                  // Square with border instead of circle for 8-bit feel
+                  border: Border.all(color: Colors.black, width: 2),
                 ),
                 child: Center(
                   child: Text(
                     '${tile.ballSize}',
-                    style: const TextStyle(
+                    style: GoogleFonts.pressStart2p(
                       color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14,
+                      fontSize: 10, // Very small for pixel font inside small block
                     ),
                   ),
                 ),

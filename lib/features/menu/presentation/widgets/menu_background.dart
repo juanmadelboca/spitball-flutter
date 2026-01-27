@@ -23,7 +23,7 @@ class _MenuBackgroundState extends State<MenuBackground>
     )..repeat();
 
     // Generate initial particles
-    for (int i = 0; i < 20; i++) {
+    for (int i = 0; i < 30; i++) {
       _particles.add(_generateParticle());
     }
   }
@@ -32,10 +32,10 @@ class _MenuBackgroundState extends State<MenuBackground>
     return Particle(
       x: _random.nextDouble(),
       y: _random.nextDouble(),
-      size: _random.nextDouble() * 30 + 10,
-      speedX: (_random.nextDouble() - 0.5) * 0.002,
-      speedY: (_random.nextDouble() - 0.5) * 0.002,
-      color: Colors.white.withOpacity(_random.nextDouble() * 0.15 + 0.05),
+      size: _random.nextDouble() * 20 + 5, // Smaller, square pixels
+      speedX: (_random.nextDouble() - 0.5) * 0.001, // Slower for retro feel
+      speedY: (_random.nextDouble() - 0.5) * 0.001,
+      color: Colors.white.withValues(alpha: _random.nextDouble() * 0.1 + 0.02),
     );
   }
 
@@ -49,14 +49,7 @@ class _MenuBackgroundState extends State<MenuBackground>
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            Color(0xFF2C3E50), // Dark Blue Grey
-            Color(0xFF4CA1AF), // Teal-ish
-          ],
-        ),
+        color: Color(0xFF212121), // Dark retro background
       ),
       child: AnimatedBuilder(
         animation: _controller,
@@ -107,11 +100,15 @@ class ParticlePainter extends CustomPainter {
       if (particle.y < -0.1) particle.y = 1.1;
       if (particle.y > 1.1) particle.y = -0.1;
 
-      // Draw
+      // Draw Square (Pixel)
       final paint = Paint()..color = particle.color;
-      canvas.drawCircle(
-        Offset(particle.x * size.width, particle.y * size.height),
-        particle.size,
+      canvas.drawRect(
+        Rect.fromLTWH(
+          particle.x * size.width, 
+          particle.y * size.height, 
+          particle.size, 
+          particle.size
+        ),
         paint,
       );
     }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:spitball/features/menu/presentation/widgets/glass_button.dart';
+import 'package:spitball/features/menu/presentation/widgets/pixel_button.dart';
 import 'package:spitball/features/menu/presentation/widgets/menu_background.dart';
 
 import '../../../game/presentation/pages/game_screen.dart';
@@ -19,7 +19,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
   bool _isPlayMenuExpanded = false;
 
   void _startGame(BuildContext context, int difficulty) {
-    print('Starting game with AI difficulty: $difficulty');
+    // print('Starting game with AI difficulty: $difficulty');
 
     Navigator.pushReplacement(
       context,
@@ -46,28 +46,29 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                   children: [
                      Hero( // Add Hero animation to logo if we navigate elsewhere
                        tag: 'game_logo',
-                       child: Image.asset(
-                        'assets/images/ballgreen.png',
-                        height: isWide ? 140 : 160,
-                        filterQuality: FilterQuality.high,
+                       child: ClipRect(
+                         child: Align(
+                           alignment: Alignment.topCenter,
+                           heightFactor: 0.5, // Show only the top half (1st sprite)
+                           child: Image.asset(
+                             'assets/images/green_ball_idle.png',
+                             height: isWide ? 140 : 160,
+                             filterQuality: FilterQuality.none, // Pixel art needs no filtering
+                           ),
+                         ),
                        ),
                      ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 20),
                     Text(
                       'SPITBALL',
-                      style: GoogleFonts.luckiestGuy(
-                        fontSize: isWide ? 60 : 55,
+                      style: GoogleFonts.pressStart2p( // Pixel font
+                        fontSize: isWide ? 40 : 35,
                         color: const Color(0xFFf3c64a),
                         shadows: [
-                          Shadow(
-                            blurRadius: 10.0,
-                            color: Colors.black.withOpacity(0.5),
-                            offset: const Offset(5.0, 5.0),
-                          ),
-                          const Shadow( // Extra outline effect
-                            blurRadius: 2.0,
+                          const Shadow(
+                            blurRadius: 0,
                             color: Colors.black,
-                            offset: Offset(-2.0, -2.0),
+                            offset: Offset(4.0, 4.0),
                           ),
                         ],
                       ),
@@ -79,7 +80,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      GlassButton(
+                      PixelButton(
                         text: 'PLAY',
                         hasIcon: true,
                         baseColor: Colors.blue,
@@ -95,21 +96,21 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                         child: _isPlayMenuExpanded
                             ? Column(
                                 children: [
-                                  GlassButton(
+                                  PixelButton(
                                     text: 'Easy',
-                                    fontSize: 20,
+                                    fontSize: 16,
                                     baseColor: Colors.green,
                                     onPressed: () => _startGame(context, 0),
                                   ),
-                                  GlassButton(
+                                  PixelButton(
                                     text: 'Medium',
-                                    fontSize: 20,
+                                    fontSize: 16,
                                     baseColor: Colors.orange,
                                     onPressed: () => _startGame(context, 1),
                                   ),
-                                  GlassButton(
+                                  PixelButton(
                                     text: 'Hard',
-                                    fontSize: 20,
+                                    fontSize: 16,
                                     baseColor: Colors.red,
                                     onPressed: () => _startGame(context, 2),
                                   ),
@@ -117,7 +118,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                               )
                             : const SizedBox.shrink(),
                       ),
-                      GlassButton(
+                      PixelButton(
                         text: 'TUTORIAL',
                         baseColor: Colors.purple,
                         onPressed: () {

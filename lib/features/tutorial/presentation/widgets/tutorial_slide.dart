@@ -47,40 +47,40 @@ class TutorialSlide extends StatelessWidget {
                       Text(
                         title,
                         textAlign: TextAlign.center,
-                        style: GoogleFonts.luckiestGuy(
-                          fontSize: 28, // Slightly smaller for landscape
+                        style: GoogleFonts.pressStart2p( // Pixel Title
+                          fontSize: 18, // Reduced
                           color: Colors.white,
                           shadows: [
                             const Shadow(
-                              blurRadius: 4.0,
+                              blurRadius: 0,
                               color: Colors.black,
-                              offset: Offset(2.0, 2.0),
+                              offset: Offset(3.0, 3.0),
                             ),
                           ],
                         ),
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 12),
                       Container(
-                        padding: const EdgeInsets.all(12),
+                        padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.9),
-                          borderRadius: BorderRadius.circular(16),
+                          color: Colors.white,
+                          border: Border.all(color: Colors.black, width: 3),
                           boxShadow: [
-                             BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
-                              blurRadius: 8,
-                              offset: const Offset(0, 4),
+                             const BoxShadow(
+                              color: Colors.black,
+                              blurRadius: 0,
+                              offset: Offset(6, 6),
                             )
                           ]
                         ),
                         child: Text(
                           description,
                           textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            height: 1.3,
-                            color: Colors.black87,
-                            fontWeight: FontWeight.w500,
+                          style: GoogleFonts.vt323(
+                            fontSize: 22, // Reduced
+                            height: 1.1,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
@@ -93,52 +93,58 @@ class TutorialSlide extends StatelessWidget {
         } else {
           // Portrait Layout (Original)
           return Container(
-            padding: const EdgeInsets.all(24),
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start, // Start from top
               children: [
+                const SizedBox(height: 20), // Top padding
                 Text(
                   title,
                   textAlign: TextAlign.center,
-                  style: GoogleFonts.luckiestGuy(
-                    fontSize: 32,
+                  style: GoogleFonts.pressStart2p(
+                    fontSize: 20, 
                     color: Colors.white,
                     shadows: [
                       const Shadow(
-                        blurRadius: 4.0,
+                        blurRadius: 0,
                         color: Colors.black,
-                        offset: Offset(2.0, 2.0),
+                        offset: Offset(3.0, 3.0),
                       ),
                     ],
                   ),
                 ),
-                const SizedBox(height: 30),
-                DemoBoard(type: demoType),
-                const SizedBox(height: 30),
+                const SizedBox(height: 10), // Reduced gap
                 Container(
-                  padding: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.9),
-                    borderRadius: BorderRadius.circular(16),
+                    color: Colors.white,
+                    border: Border.all(color: Colors.black, width: 3),
                     boxShadow: [
-                       BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
-                        blurRadius: 8,
-                        offset: const Offset(0, 4),
+                       const BoxShadow(
+                        color: Colors.black,
+                        blurRadius: 0,
+                        offset: Offset(6, 6),
                       )
                     ]
                   ),
                   child: Text(
                     description,
                     textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      height: 1.4,
-                      color: Colors.black87,
-                      fontWeight: FontWeight.w500,
+                    style: GoogleFonts.vt323(
+                      fontSize: 24,
+                      height: 1.1,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
+                const SizedBox(height: 20),
+                Expanded( 
+                  child: Center(
+                    child: DemoBoard(type: demoType),
+                  ),
+                ),
+                const Spacer(), // Push everything up
               ],
             ),
           );

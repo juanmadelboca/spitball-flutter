@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:spitball/features/menu/presentation/widgets/glass_button.dart';
+import 'package:spitball/features/menu/presentation/widgets/pixel_button.dart';
 import 'package:spitball/features/menu/presentation/widgets/menu_background.dart';
 import 'package:spitball/features/tutorial/presentation/widgets/demo_board.dart';
 import 'package:spitball/features/tutorial/presentation/widgets/tutorial_slide.dart';
@@ -75,7 +75,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: IconButton(
-                      icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 30),
+                      icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 24),
                       onPressed: () => Navigator.pop(context),
                     ),
                   ),
@@ -94,33 +94,35 @@ class _TutorialScreenState extends State<TutorialScreen> {
                 ),
 
                 // Controls
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 20),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: List.generate(_slides.length, (index) {
-                          return AnimatedContainer(
-                            duration: const Duration(milliseconds: 300),
-                            margin: const EdgeInsets.symmetric(horizontal: 4),
-                            width: _currentPage == index ? 24 : 12,
-                            height: 12,
-                            decoration: BoxDecoration(
-                              color: _currentPage == index ? Colors.yellowAccent : Colors.white.withOpacity(0.5),
-                              borderRadius: BorderRadius.circular(6),
-                            ),
-                          );
-                        }),
-                      ),
-                      const SizedBox(height: 16),
-                      GlassButton(
-                        text: _currentPage == _slides.length - 1 ? 'LET\'S PLAY!' : 'NEXT',
-                        fontSize: 20,
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: List.generate(_slides.length, (index) {
+                        return AnimatedContainer(
+                          duration: const Duration(milliseconds: 300),
+                          margin: const EdgeInsets.symmetric(horizontal: 4),
+                          width: 8, // Smaller width
+                          height: 8, // Smaller height
+                          decoration: BoxDecoration(
+                            color: _currentPage == index ? Colors.yellowAccent : Colors.black.withValues(alpha: 0.5),
+                            border: Border.all(color: Colors.white, width: 1), // Tighter border
+                          ),
+                        );
+                      }),
+                    ),
+                    const SizedBox(height: 10),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.3, // Max 30% width
+                      child: PixelButton(
+                        text: _currentPage == _slides.length - 1 ? 'PLAY' : 'NEXT', // Shortened text
+                        fontSize: 12, // Smaller font
                         onPressed: _nextPage,
                       ),
-                    ],
-                  ),
+                    ),
+                    const SizedBox(height: 20),
+                  ],
                 ),
               ],
             ),
