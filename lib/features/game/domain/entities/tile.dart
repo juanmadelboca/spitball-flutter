@@ -39,7 +39,6 @@ class TileEntity {
     bool isCurrentPink = currentBall is BallPinkEntity;
 
     if (limitedMove && ((isImmigrantGreen && isCurrentGreen) || (isImmigrantPink && isCurrentPink))) {
-      print("GAME: You have too few balls to perform that move due to limited move rule.");
       return false;
     }
 

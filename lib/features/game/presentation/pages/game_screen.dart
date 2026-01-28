@@ -12,6 +12,8 @@ import 'package:flame/game.dart';
 import 'package:spitball/features/game/presentation/bloc/bloc/bloc.dart';
 import 'package:spitball/features/game/presentation/flame_game/spitball_game.dart';
 import 'package:spitball/features/menu/presentation/pages/menu.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:spitball/features/menu/presentation/widgets/pixel_button.dart';
 
 class GameScreen extends StatelessWidget {
   final int aiLevel;
@@ -48,18 +50,61 @@ class GameView extends StatelessWidget {
       context: context,
       barrierDismissible: false,
       builder: (BuildContext dialogContext) {
-        return AlertDialog(
-          title: const Text('Game Over'),
-          content: Text('Winner: ${state.winner}! \nGreen Balls: ${state.greenBallCount}\nPink Balls: ${state.pinkBallCount}'),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Back to Menu'),
-              onPressed: () {
-                Navigator.of(dialogContext).pop();
-                Navigator.of(context).pushReplacementNamed(MainMenuScreen.routeName);
-              },
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          insetPadding: const EdgeInsets.all(20),
+          child: Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(color: Colors.black, width: 4),
+              boxShadow: const [
+                BoxShadow(
+                  color: Colors.black,
+                  offset: Offset(8, 8),
+                  blurRadius: 0,
+                ),
+              ],
             ),
-          ],
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'GAME OVER',
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.pressStart2p(
+                    fontSize: 24,
+                    color: Colors.black,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  'Winner: ${state.winner}!',
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.vt323(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  'Green: ${state.greenBallCount}\nPink: ${state.pinkBallCount}',
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.vt323(
+                    fontSize: 24,
+                  ),
+                ),
+                const SizedBox(height: 30),
+                PixelButton(
+                  text: 'MENU',
+                  onPressed: () {
+                    Navigator.of(dialogContext).pop();
+                    Navigator.of(context).pushReplacementNamed(MainMenuScreen.routeName);
+                  },
+                ),
+              ],
+            ),
+          ),
         );
       },
     );
@@ -68,6 +113,7 @@ class GameView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFF212121), // Ensure scaffold matches game bg
       body: SizedBox(
         width: double.infinity,
         height: double.infinity,
@@ -80,33 +126,56 @@ class GameView extends StatelessWidget {
             },
             child: BlocBuilder<GameBloc, GameState>(
               buildWhen: (previous, current) {
-                // Only rebuild the widget tree if we switch between high-level states.
-                // If we stay in GameInProgress, let the Flame Game handle the internal updates via FlameBlocListener.
                 return previous.runtimeType != current.runtimeType;
               },
               builder: (context, state) {
                 if (state is GameInitial) {
-                  return const Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator(color: Colors.yellowAccent));
                 }
                 if (state is GameInProgress) {
-                  // This will only be built ONCE when entering the state.
-                  // Subsequent GameInProgress updates won't trigger this build, 
-                  // but will be caught by the SpitballGame's bloc listener.
                   return GameWidget(
                     game: SpitballGame(gameBloc: context.read<GameBloc>()),
                   );
                 }
                 if (state is GameOver) {
-                  return const Center(
+                   // While the dialog is showing, we might see this. 
+                   // Let's just keep the last frame or show emptiness to avoid clutter behind dialog.
+                   // Actually, usually you want to see the board.
+                   // But since GameInProgress is gone, we can't see the FlameGame.
+                   // Ideally we'd keep the FlameGame visible, but BlocBuilder switches widgets.
+                   // For now, let's show a pixelated "GAME OVER" text if the dialog is dismissed?
+                   // Or just nothing since the dialog is modal.
+                  return Center(
                     child: Text(
-                      "Game Over",
-                      style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                      "GAME OVER",
+                      style: GoogleFonts.pressStart2p(fontSize: 32, color: Colors.white),
                     ),
                   );
                 }
 
                 if (state is GameError) {
-                  return Center(child: Text('Error: ${state.message}'));
+                  return Center(
+                    child: Container(
+                      padding: const EdgeInsets.all(20),
+                      margin: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: Colors.redAccent,
+                        border: Border.all(color: Colors.black, width: 4),
+                         boxShadow: const [
+                          BoxShadow(
+                            color: Colors.black,
+                            offset: Offset(8, 8),
+                            blurRadius: 0,
+                          ),
+                        ],
+                      ),
+                      child: Text(
+                        'ERROR: ${state.message}',
+                        style: GoogleFonts.vt323(fontSize: 24, color: Colors.white),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  );
                 }
                 return const Center(child: Text("Something went wrong!"));
               },

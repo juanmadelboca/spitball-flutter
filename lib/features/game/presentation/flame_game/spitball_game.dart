@@ -12,7 +12,7 @@ class SpitballGame extends FlameGame {
   SpitballGame({required this.gameBloc});
 
   @override
-  Color backgroundColor() => Colors.blueGrey[800]!;
+  Color backgroundColor() => const Color(0xFF212121);
 
   @override
   Future<void> onLoad() async {

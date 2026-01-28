@@ -17,21 +17,23 @@ class TileComponent extends PositionComponent with TapCallbacks {
 
   @override
   void render(Canvas canvas) {
-    // Draw a simple background for the tile
-    // Using a slightly transparent paint to show the background image behind
+    // Checkerboard pattern matching DemoBoard
+    final bool isEven = (row + col) % 2 == 0;
+    final color = isEven ? const Color(0xFFD7B899) : const Color(0xFFA67B5B);
+
     final paint = Paint()
-      ..color = Colors.black.withOpacity(0.3)
+      ..color = color
       ..style = PaintingStyle.fill;
       
     final borderPaint = Paint()
-      ..color = Colors.white.withOpacity(0.1)
+      ..color = Colors.black.withValues(alpha: 0.1)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.0;
 
-    // Draw rounded rect
-    final rrect = RRect.fromRectAndRadius(size.toRect(), const Radius.circular(4.0));
-    canvas.drawRRect(rrect, paint);
-    canvas.drawRRect(rrect, borderPaint);
+    // Draw square rect (hard edges)
+    final rect = size.toRect();
+    canvas.drawRect(rect, paint);
+    canvas.drawRect(rect, borderPaint);
   }
 
   @override
