@@ -80,6 +80,32 @@ class BoardComponent extends Component with FlameBlocListenable<GameBloc, GameSt
         // Prepare current sizes for next turn
         List<List<int>> currentSizes = List.generate(rows, (_) => List.filled(cols, 0));
 
+        // Add Shadow (Hard black offset)
+        add(RectangleComponent(
+          position: Vector2(startX + 8, startY + 8),
+          size: Vector2(gridWidth, gridHeight),
+          paint: Paint()..color = Colors.black,
+        ));
+
+        // Add Board Background (Brown)
+        add(RectangleComponent(
+          position: Vector2(startX, startY),
+          size: Vector2(gridWidth, gridHeight),
+          paint: Paint()
+            ..color = const Color(0xFF5D4037)
+            ..style = PaintingStyle.fill,
+        ));
+        
+        // Add Board Border (Black stroke) - render via separate component or just another rect if using border paint (but pure rect component uses one paint)
+        add(RectangleComponent(
+          position: Vector2(startX, startY),
+          size: Vector2(gridWidth, gridHeight),
+          paint: Paint()
+            ..color = Colors.black
+            ..style = PaintingStyle.stroke
+            ..strokeWidth = 4.0,
+        ));
+
          for (int r = 0; r < rows; r++) {
            for (int c = 0; c < cols; c++) {
               final tile = board[r][c];

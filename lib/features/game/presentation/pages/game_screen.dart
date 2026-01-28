@@ -122,6 +122,18 @@ class GameView extends StatelessWidget {
             listener: (context, state) {
               if (state is GameOver) {
                 _showGameOverDialog(context, state);
+              } else if (state is GameInProgress && state.errorMessage != null) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      state.errorMessage!,
+                      style: GoogleFonts.vt323(fontSize: 20, color: Colors.white),
+                    ),
+                    backgroundColor: Colors.red,
+                    behavior: SnackBarBehavior.floating,
+                    shape: const BeveledRectangleBorder(), // Retro style
+                  ),
+                );
               }
             },
             child: BlocBuilder<GameBloc, GameState>(

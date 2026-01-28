@@ -15,6 +15,7 @@ class GameInProgress extends GameState {
   final bool isMyTurn;
   final int? selectedRow;
   final int? selectedCol;
+  final String? errorMessage; // Transient error message
 
   const GameInProgress({
     required this.board,
@@ -22,10 +23,29 @@ class GameInProgress extends GameState {
     required this.isMyTurn,
     this.selectedRow,
     this.selectedCol,
+    this.errorMessage,
   });
 
+  GameInProgress copyWith({
+    List<List<TileEntity>>? board,
+    int? currentPlayer,
+    bool? isMyTurn,
+    int? selectedRow,
+    int? selectedCol,
+    String? errorMessage,
+  }) {
+    return GameInProgress(
+      board: board ?? this.board,
+      currentPlayer: currentPlayer ?? this.currentPlayer,
+      isMyTurn: isMyTurn ?? this.isMyTurn,
+      selectedRow: selectedRow ?? this.selectedRow,
+      selectedCol: selectedCol ?? this.selectedCol,
+      errorMessage: errorMessage, // Nullable, so if passed as null it clears
+    );
+  }
+
   @override
-  List<Object?> get props => [board, currentPlayer, isMyTurn, selectedRow, selectedCol];
+  List<Object?> get props => [board, currentPlayer, isMyTurn, selectedRow, selectedCol, errorMessage];
 }
 
 class GameOver extends GameState {

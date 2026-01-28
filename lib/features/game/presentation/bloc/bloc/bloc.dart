@@ -64,7 +64,17 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   void _onTileTapped(TileTapped event, Emitter<GameState> emit) async {
     final result = await _handleTapUseCase(row: event.row, col: event.col);
     result.fold(
-      (failure) => emit(GameError(message: failure.toString())),
+      (failure) {
+        if (state is GameInProgress) {
+          final curr = state as GameInProgress;
+          // Emit error to trigger listener
+          emit(curr.copyWith(errorMessage: failure.toString()));
+          // Clear error so it doesn't persist
+          emit(curr.copyWith(errorMessage: null));
+        } else {
+          emit(GameError(message: failure.toString()));
+        }
+      },
       (boardEntity) => emit(_mapBoardEntityToState(boardEntity)),
     );
   }
